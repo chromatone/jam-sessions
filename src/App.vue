@@ -1,6 +1,7 @@
 <script setup>
 import { createDirectus, realtime } from '@directus/sdk';
 import { computed, onMounted, reactive, ref } from 'vue';
+import logo from './logo.svg?raw'
 
 const client = createDirectus('ws://localhost:8055/websocket')
   .with(realtime());
@@ -71,7 +72,8 @@ client.onWebSocket('error', function (error) {
 
 <template lang="pug">
 .flex.flex-col.gap-4.items-center.justify-center.min-h-100dvh
-  .flex.flex-col.gap-4.justify-center
+  .flex.flex-col.gap-4.justify-center.items-center
+    .p-2.w-20(v-html="logo")
     .text-4xl.font-bold JAM SESSIONS!
     form.flex.flex-col.gap-4(@submit.prevent)
       input.p-4.rounded-xl(v-model="title" type="text")
