@@ -66,7 +66,7 @@ client.onWebSocket('error', function (error) {
 <template lang="pug">
 .flex.flex-col.gap-4.items-center.justify-center.min-h-100dvh
   .flex.flex-col.gap-4.justify-center
-    .text-4xl JAM SESSIONS!
+    .text-4xl.font-bold JAM SESSIONS!
     input.p-4.rounded-xl(v-model="title" type="text")
     button.p-2.shadow-lg.bg-purple-400(@click="createSession(title)") Create a session
   .flex.flex-col.gap-2.w-full.max-w-30ch
