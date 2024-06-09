@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   directus:
     image: directus/directus:latest
@@ -7,9 +5,14 @@ services:
     ports:
       - "8055:8055"
     environment:
-      DIRECTUS_SECRET: your-secret-key
-      DATABASE_CLIENT: sqlite3
-      DATABASE_FILENAME: /data/db.sqlite
+      - DATABASE_CLIENT=sqlite3
+      - DATABASE_FILENAME=/data/db.sqlite
+      - WEBSOCKETS_ENABLED=true
+      - WEBSOCKETS_REST_AUTH=public
+      - ADMIN_EMAIL=davay@chromatone.center
+      - ADMIN_PASSWORD=JrcOjYMbcSSy
+      - SECRET=my-app-secret-key
+      - PUBLIC_URL=https://sessions.chromatone.center/
     volumes:
       - directus_data:/data
     restart: always

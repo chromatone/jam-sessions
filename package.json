@@ -1,6 +1,6 @@
 {
 	"name": "jam",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"private": true,
 	"type": "module",
 	"description": "",
@@ -9,7 +9,7 @@
 		"dev": "vite",
 		"build": "vite build",
 		"preview": "vite preview",
-		"up": "docker compose up"
+		"up": "docker compose up --build"
 	},
 	"keywords": [],
 	"author": "",

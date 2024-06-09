@@ -10,6 +10,10 @@ export default defineConfig({
     port: 3122,
     strictPort: false,
   },
+  preview: {
+    host: "0.0.0.0",
+    port: '4210'
+  },
   plugins: [
     vue(),
     UnoCSS(),

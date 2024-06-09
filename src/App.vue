@@ -1,10 +1,77 @@
 <script setup>
-const p = 5
+import { createDirectus, realtime } from '@directus/sdk';
+import { onMounted, reactive, ref } from 'vue';
+
+const client = createDirectus('ws://localhost:8055/websocket')
+  .with(realtime());
+
+
+const title = ref('')
+
+const sessions = reactive({})
+
+function createSession(title) {
+  client.sendMessage({
+    type: 'items',
+    collection: 'sessions',
+    action: 'create',
+    data: { title },
+  });
+}
+
+onMounted(async () => {
+  await client.connect();
+  await subscribe();
+})
+
+async function subscribe() {
+  const { subscription } = await client.subscribe('sessions', {
+    query: { fields: ['id', 'title', 'status'] },
+  });
+
+  for await (const ev of subscription) {
+    if (!ev.data) continue
+    console.log(ev?.data)
+    for (let item of ev?.data) {
+      sessions[item?.id] = item
+    }
+
+  }
+}
+
+client.onWebSocket('open', function () {
+  console.log({ event: 'onopen' });
+});
+
+client.onWebSocket('message', function (ev) {
+
+  console.log({ event: 'onmessage', ev });
+
+  if (ev.type === 'ping') {
+    client.sendMessage({
+      type: 'pong',
+    });
+  }
+});
+
+client.onWebSocket('close', function (ev) {
+  console.log({ event: 'onclose', ev });
+});
+
+client.onWebSocket('error', function (error) {
+  console.log({ event: 'onerror', error });
+});
 </script>
 
 <template lang="pug">
-.flex.flex-col.gap-4.items-center.justify-center
-  .p-20
-    .text-2xl Welcome!
-    button.p-2.shadow-lg Create a session
+.flex.flex-col.gap-4.items-center.justify-center.min-h-100dvh
+  .flex.flex-col.gap-4.justify-center
+    .text-4xl JAM SESSIONS!
+    input.p-4.rounded-xl(v-model="title" type="text")
+    button.p-2.shadow-lg.bg-purple-400(@click="createSession(title)") Create a session
+  .flex.flex-col.gap-2.w-full.max-w-30ch
+    .p-1.bg-light-200.rounded-lg(
+      :class="{'op-20': session?.status == 'draft'}"
+      v-for="session in sessions" 
+      :key="session") {{ session?.title }}
 </template>
