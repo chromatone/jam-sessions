@@ -1,6 +1,6 @@
 <script setup>
 import { createDirectus, realtime } from '@directus/sdk';
-import { onMounted, reactive, ref } from 'vue';
+import { computed, onMounted, reactive, ref } from 'vue';
 
 const client = createDirectus('ws://localhost:8055/websocket')
   .with(realtime());
@@ -26,7 +26,11 @@ onMounted(async () => {
 
 async function subscribe() {
   const { subscription } = await client.subscribe('sessions', {
-    query: { fields: ['id', 'title', 'status'] },
+    query: {
+      fields: ['id', 'title', 'status', 'date_created'],
+      sort: ['-date_created'],
+      limit: 10
+    },
   });
 
   for await (const ev of subscription) {
@@ -38,6 +42,8 @@ async function subscribe() {
 
   }
 }
+
+const sorted = computed(() => Object.values(sessions).sort((a, b) => a.date_created > b.date_created ? -1 : 1))
 
 client.onWebSocket('open', function () {
   console.log({ event: 'onopen' });
@@ -67,11 +73,14 @@ client.onWebSocket('error', function (error) {
 .flex.flex-col.gap-4.items-center.justify-center.min-h-100dvh
   .flex.flex-col.gap-4.justify-center
     .text-4xl.font-bold JAM SESSIONS!
-    input.p-4.rounded-xl(v-model="title" type="text")
-    button.p-2.shadow-lg.bg-purple-400(@click="createSession(title)") Create a session
+    form.flex.flex-col.gap-4(@submit.prevent)
+      input.p-4.rounded-xl(v-model="title" type="text")
+      button.p-2.shadow-lg.bg-purple-400(
+        type="submit"
+        @click="createSession(title)") Create a session
   .flex.flex-col.gap-2.w-full.max-w-30ch
     .p-1.bg-light-200.rounded-lg(
       :class="{'op-20': session?.status == 'draft'}"
-      v-for="session in sessions" 
+      v-for="session in sorted" 
       :key="session") {{ session?.title }}
 </template>
