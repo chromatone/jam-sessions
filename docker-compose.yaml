@@ -4,15 +4,8 @@ services:
     container_name: directus
     ports:
       - "8055:8055"
-    environment:
-      - DATABASE_CLIENT=sqlite3
-      - DATABASE_FILENAME=/data/db.sqlite
-      - WEBSOCKETS_ENABLED=true
-      - WEBSOCKETS_REST_AUTH=public
-      - ADMIN_EMAIL=davay@chromatone.center
-      - ADMIN_PASSWORD=JrcOjYMbcSSy
-      - SECRET=my-app-secret-key
-      - PUBLIC_URL=https://sessions.chromatone.center/
+    env_file:
+      - .env
     volumes:
       - directus_data:/data
     restart: always
@@ -20,11 +13,11 @@ services:
   vite:
     build: ./
     container_name: vite-app
-    environment:
-      - VITE_API_URL=http://localhost:8055
     ports:
       - "3000:4210"
     restart: always
+    env_file:
+      - .env
 
 volumes:
   directus_data:

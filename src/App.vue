@@ -3,9 +3,8 @@ import { createDirectus, realtime } from '@directus/sdk';
 import { computed, onMounted, reactive, ref } from 'vue';
 import logo from './logo.svg?raw'
 
-const client = createDirectus('ws://localhost:8055/websocket')
+const client = createDirectus(import.meta.env.VITE_WS_URL)
   .with(realtime());
-
 
 const title = ref('')
 
