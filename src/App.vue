@@ -11,15 +11,6 @@ const title = ref('')
 
 const sessions = reactive({})
 
-function createSession(title) {
-  client.sendMessage({
-    type: 'items',
-    collection: 'sessions',
-    action: 'create',
-    data: { title },
-  });
-}
-
 onMounted(async () => {
   await client.connect();
   await subscribe();
@@ -68,6 +59,17 @@ client.onWebSocket('close', function (ev) {
 client.onWebSocket('error', function (error) {
   console.log({ event: 'onerror', error });
 });
+
+function createSession() {
+  if (!title.value) return
+  client.sendMessage({
+    type: 'items',
+    collection: 'sessions',
+    action: 'create',
+    data: { title: title.value },
+  });
+  title.value = ''
+}
 </script>
 
 <template lang="pug">
@@ -76,7 +78,7 @@ client.onWebSocket('error', function (error) {
     .p-2.w-20(v-html="logo")
     .text-4xl.font-bold JAM SESSIONS!
     form.flex.flex-col.gap-4(@submit.prevent)
-      input.p-4.rounded-xl(v-model="title" type="text")
+      input.p-4.rounded-xl(v-model="title" type="text" placeholder="Enter session title")
       button.p-2.shadow-lg.bg-purple-400(
         type="submit"
         @click="createSession(title)") Create a session

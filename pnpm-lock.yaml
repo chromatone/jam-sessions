@@ -9,7 +9,7 @@ importers:
   .:
     dependencies:
       '@directus/sdk':
-        specifier: ^16.0.2
+        specifier: ^16.1.0
         version: 16.1.0
       '@unocss/reset':
         specifier: ^0.60.4
@@ -31,7 +31,7 @@ importers:
         specifier: ^5.0.5
         version: 5.0.5(vite@5.2.13)(vue@3.4.27)
       '@vue/language-plugin-pug':
-        specifier: ^2.0.19
+        specifier: ^2.0.21
         version: 2.0.21
       pug:
         specifier: ^3.0.3
