@@ -12,6 +12,6 @@ COPY . .
 
 RUN pnpm build
 
-EXPOSE 4173
+EXPOSE 4210
 
-CMD ["pnpm", "preview", "--host", "0.0.0.0", "--port", "4173"]
+CMD ["pnpm", "preview", "--host", "0.0.0.0", "--port", "4210"]

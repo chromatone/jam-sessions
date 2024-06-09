@@ -20,7 +20,7 @@ services:
     environment:
       - VITE_API_URL=http://localhost:8055
     ports:
-      - "3000:4173"
+      - "3000:4210"
     restart: always
 
 volumes:

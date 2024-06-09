@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import './style.css'
+import './style.postcss'
 import App from './App.vue'
 
 import '@unocss/reset/tailwind.css'
